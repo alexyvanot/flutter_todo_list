@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // save feature
+import 'dart:convert'; // pour json
 
 void main() {
   runApp(const MyApp());
@@ -27,11 +29,43 @@ class _TodoListScreenState extends State<TodoListScreen> {
   final List<TodoItem> _todos = [];
   final TextEditingController _controller = TextEditingController();
 
+  // called at the start of the app
+  @override
+  void initState() {
+    super.initState();
+    _loadTodos();
+  }
+
+  // load from key map todos
+  Future<void> _loadTodos() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? todoList = prefs.getStringList('todos');
+    if (todoList != null) {
+      setState(() {
+        _todos.clear();
+        _todos.addAll(todoList.map((item) {
+          final todoData = jsonDecode(item);
+          return TodoItem(title: todoData['title'], isDone: todoData['isDone']);
+        }));
+      });
+    }
+  }
+
+  // save en json and key map to "todos"
+  Future<void> _saveTodos() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> todoList = _todos.map((todo) {
+      return jsonEncode({'title': todo.title, 'isDone': todo.isDone});
+    }).toList();
+    await prefs.setStringList('todos', todoList);
+  }
+
   void _addTodo() {
     if (_controller.text.isNotEmpty) {
       setState(() {
         _todos.add(TodoItem(title: _controller.text, isDone: false));
         _controller.clear();
+        _saveTodos();
       });
     }
   }
@@ -40,7 +74,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(
-        middle: Text('Todo List'),
+        middle: Text('Flutter Todo List'),
       ),
       child: Column(
         children: [
@@ -63,6 +97,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                   onLongPress: () {
                     setState(() {
                       _todos.removeAt(index);
+                      _saveTodos();
                     });
                   },
                   child: Container(
@@ -75,6 +110,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                             onTap: () {
                               setState(() {
                                 _todos[index].isDone = !_todos[index].isDone;
+                                _saveTodos();
                               });
                             },
                             child: Text(
@@ -92,6 +128,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                           onChanged: (value) {
                             setState(() {
                               _todos[index].isDone = value;
+                              _saveTodos();
                             });
                           },
                         ),
