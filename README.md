@@ -1,6 +1,9 @@
 # Flutter Todo List
 
-<img src="assets/images/README/appshow.png" alt="Aperçu de l'application" width="300"/>
+<div align="center">
+    <img src="assets/images/README/appshow.png" alt="Aperçu de l'application" width="300" />
+</div>
+
 
 ## Description
 
