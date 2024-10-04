@@ -1,16 +1,41 @@
-# flutter_todo_list
+# Flutter Todo List
 
-A new Flutter project.
+## Description
+Flutter Todo List est une application simple de gestion de tâches écrite en Dart. L'utilisateur peut ajouter des tâches, marquer des tâches comme terminées, et les supprimer. L'application utilise [shared-preferences](https://pub.dev/packages/shared_preferences) pour sauvegarder les tâches localement, permettant ainsi de conserver les données même après la fermeture de l'application.
 
-## Getting Started
+## Features
+- Ajout de nouvelles tâches
+- Marquer les tâches comme terminées
+- Suppression des tâches
+- Sauvegarde des tâches avec `SharedPreferences`
+- Interface utilisateur réactive avec le style Cupertino
 
-This project is a starting point for a Flutter application.
+## Installation
+1. Assurez-vous d'avoir Flutter installé sur votre machine. Vous pouvez suivre les instructions sur [le site officiel de Flutter](https://flutter.dev/docs/get-started/install).
+2. **Activez le mode développeur sur Windows :**  
+   - Accédez à **Paramètres > Mise à jour et sécurité > Pour les développeurs**.  
+   - Activez l'option **Mode développeur**.  
+   - Pour plus de détails, consultez la [documentation Microsoft](https://learn.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development).
+3. Clonez le dépôt :
+    ```sh
+    git clone https://github.com/yourusername/flutter_todo_list.git
+    ```
+4. Naviguez dans le répertoire du projet :
+    ```sh
+    cd flutter_todo_list
+    ```
+5. Installez les dépendances :
+    ```sh
+    flutter pub get
+    ```
 
-A few resources to get you started if this is your first Flutter project:
+## Usage
+Pour exécuter l'application, utilisez la commande suivante :
+```sh
+flutter run
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Assurez-vous d'avoir un simulateur ou un appareil connecté.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+License
+Ce projet est sous licence MIT. Consultez le fichier [LICENSE](LICENSE) pour plus de détails.
