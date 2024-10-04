@@ -1,6 +1,6 @@
 # Flutter Todo List
 
-![Aperçu de l'application](assets/images/README/appshow.png)
+<img src="assets/images/README/appshow.png" alt="Aperçu de l'application" width="300"/>
 
 ## Description
 
