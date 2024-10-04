@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -26,12 +27,11 @@ class _TodoListScreenState extends State<TodoListScreen> {
   final List<TodoItem> _todos = [];
   final TextEditingController _controller = TextEditingController();
 
-  // ajouter un todo
   void _addTodo() {
     if (_controller.text.isNotEmpty) {
       setState(() {
         _todos.add(TodoItem(title: _controller.text, isDone: false));
-        _controller.clear(); // nettoyage du champ de texte apres l'ajout du todo
+        _controller.clear();
       });
     }
   }
@@ -52,17 +52,62 @@ class _TodoListScreenState extends State<TodoListScreen> {
             ),
           ),
           CupertinoButton.filled(
-            onPressed: _addTodo, // Appel de la fonction pour ajouter une tâche
+            onPressed: _addTodo,
             child: const Text('Ajouter'),
           ),
-          // ajouter ici la liste des todos plus tard
+          Expanded(
+            child: ListView.builder(
+              itemCount: _todos.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onLongPress: () {
+                    setState(() {
+                      _todos.removeAt(index);
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _todos[index].isDone = !_todos[index].isDone;
+                              });
+                            },
+                            child: Text(
+                              _todos[index].title,
+                              style: TextStyle(
+                                decoration: _todos[index].isDone
+                                    ? TextDecoration.lineThrough
+                                    : null,
+                              ),
+                            ),
+                          ),
+                        ),
+                        CupertinoSwitch(
+                          value: _todos[index].isDone,
+                          onChanged: (value) {
+                            setState(() {
+                              _todos[index].isDone = value;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-// structure d'un todo
 class TodoItem {
   final String title;
   bool isDone;
