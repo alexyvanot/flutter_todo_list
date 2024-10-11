@@ -28,15 +28,14 @@ class TodoListScreen extends StatefulWidget {
 class _TodoListScreenState extends State<TodoListScreen> {
   final List<TodoItem> _todos = [];
   final TextEditingController _controller = TextEditingController();
+  String _filter = 'all'; // filtrage des todo
 
-  // called at the start of the app
   @override
   void initState() {
     super.initState();
     _loadTodos();
   }
 
-  // load from key map todos
   Future<void> _loadTodos() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? todoList = prefs.getStringList('todos');
@@ -51,7 +50,6 @@ class _TodoListScreenState extends State<TodoListScreen> {
     }
   }
 
-  // save en json and key map to "todos"
   Future<void> _saveTodos() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> todoList = _todos.map((todo) {
@@ -70,8 +68,21 @@ class _TodoListScreenState extends State<TodoListScreen> {
     }
   }
 
+  void _filterTodos(String filter) {
+    setState(() {
+      _filter = filter;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Filtrer les tâches
+    List<TodoItem> filteredTodos = _filter == 'completed'
+        ? _todos.where((todo) => todo.isDone).toList()
+        : _filter == 'incomplete'
+            ? _todos.where((todo) => !todo.isDone).toList()
+            : _todos;
+
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(
         middle: Text('Flutter Todo List'),
@@ -89,19 +100,46 @@ class _TodoListScreenState extends State<TodoListScreen> {
             onPressed: _addTodo,
             child: const Text('Ajouter'),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildFilterButton('all', 'Tous'),
+              _buildFilterButton('completed', 'Complètes'),
+              _buildFilterButton('incomplete', 'Incomplètes'),
+            ],
+          ),
           Expanded(
             child: ListView.builder(
-              itemCount: _todos.length,
+              itemCount: filteredTodos.length,
               itemBuilder: (context, index) {
-                return GestureDetector(
-                  onLongPress: () {
+                return Dismissible(
+                  key: Key(filteredTodos[index].title),
+                  background: Container(color: CupertinoColors.destructiveRed),
+                  onDismissed: (direction) {
                     setState(() {
-                      _todos.removeAt(index);
+                      _todos.remove(filteredTodos[index]);
                       _saveTodos();
                     });
+                    // Cupertino Dialog pour la confirmation de suppression
+                    CupertinoAlertDialog alert = CupertinoAlertDialog(
+                      title: const Text('Todo supprimée'),
+                      content: Text("${filteredTodos[index].title} a été supprimée."),
+                      actions: [
+                        CupertinoDialogAction(
+                          child: const Text('OK'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                    showCupertinoDialog(
+                      context: context,
+                      builder: (context) => alert,
+                    );
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -109,14 +147,14 @@ class _TodoListScreenState extends State<TodoListScreen> {
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
-                                _todos[index].isDone = !_todos[index].isDone;
+                                filteredTodos[index].isDone = !filteredTodos[index].isDone;
                                 _saveTodos();
                               });
                             },
                             child: Text(
-                              _todos[index].title,
+                              filteredTodos[index].title,
                               style: TextStyle(
-                                decoration: _todos[index].isDone
+                                decoration: filteredTodos[index].isDone
                                     ? TextDecoration.lineThrough
                                     : null,
                               ),
@@ -124,10 +162,10 @@ class _TodoListScreenState extends State<TodoListScreen> {
                           ),
                         ),
                         CupertinoSwitch(
-                          value: _todos[index].isDone,
+                          value: filteredTodos[index].isDone,
                           onChanged: (value) {
                             setState(() {
-                              _todos[index].isDone = value;
+                              filteredTodos[index].isDone = value;
                               _saveTodos();
                             });
                           },
@@ -142,6 +180,33 @@ class _TodoListScreenState extends State<TodoListScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildFilterButton(String filterValue, String label) {
+    bool isSelected = _filter == filterValue;
+    return isSelected
+        ? Container(
+            decoration: BoxDecoration(
+              color: CupertinoColors.activeBlue,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Text(
+              label,
+              style: const TextStyle(
+                color: CupertinoColors.white,
+              ),
+            ),
+          )
+        : GestureDetector(
+            onTap: () => _filterTodos(filterValue),
+            child: Text(
+              label,
+              style: const TextStyle(
+                color: CupertinoColors.activeBlue,
+              ),
+            ),
+          );
   }
 }
 
