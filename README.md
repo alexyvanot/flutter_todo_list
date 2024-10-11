@@ -69,4 +69,3 @@ La sauvegarde des tâches est automatique. Les modifications sont enregistrées 
 ## License
 
 Ce projet est sous licence MIT. Consultez le fichier [LICENSE](LICENSE) pour plus de détails.
-
