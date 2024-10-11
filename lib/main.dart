@@ -98,7 +98,7 @@ class TodoListScreen extends StatelessWidget {
                           return await _confirmDelete(context, filteredTodos[index]);
                         },
                         onDismissed: (direction) {
-                          todoProvider.removeTodoAt(index);
+                          todoProvider.removeTodo(filteredTodos[index]);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -109,7 +109,7 @@ class TodoListScreen extends StatelessWidget {
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () {
-                                    todoProvider.toggleTodoCompletion(index);
+                                    todoProvider.toggleTodoCompletion(filteredTodos[index]);
                                   },
                                   child: Text(
                                     filteredTodos[index].title,
@@ -124,7 +124,7 @@ class TodoListScreen extends StatelessWidget {
                               CupertinoSwitch(
                                 value: filteredTodos[index].isDone,
                                 onChanged: (value) {
-                                  todoProvider.toggleTodoCompletion(index);
+                                  todoProvider.toggleTodoCompletion(filteredTodos[index]);
                                 },
                               ),
                             ],
@@ -231,14 +231,14 @@ class TodoProvider extends ChangeNotifier {
     }
   }
 
-  void removeTodoAt(int index) {
-    _todos.removeAt(index);
+  void removeTodo(TodoItem todo) {
+    _todos.remove(todo);
     _saveTodos();
     notifyListeners();
   }
 
-  void toggleTodoCompletion(int index) {
-    _todos[index].isDone = !_todos[index].isDone;
+  void toggleTodoCompletion(TodoItem todo) {
+    todo.isDone = !todo.isDone;
     _saveTodos();
     notifyListeners();
   }
