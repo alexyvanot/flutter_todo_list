@@ -6,15 +6,17 @@
 
 ## Description
 
-Flutter Todo List est une application simple de gestion de tâches écrite en Dart. L'utilisateur peut ajouter des tâches, marquer des tâches comme terminées, et les supprimer. L'application utilise [shared-preferences](https://pub.dev/packages/shared_preferences) pour sauvegarder les tâches localement, permettant ainsi de conserver les données même après la fermeture de l'application.
+Flutter Todo List est une application simple de gestion de tâches écrite en Dart. L'utilisateur peut ajouter des tâches, marquer des tâches comme terminées, et les supprimer. L'application utilise [shared-preferences](https://pub.dev/packages/shared_preferences) pour sauvegarder les tâches localement et [Provider](https://pub.dev/packages/provider) pour la gestion de l'état global, permettant ainsi de conserver les données et d'actualiser l'interface de manière réactive.
 
 ## Features
 
 - Ajout de nouvelles tâches
 - Marquer les tâches comme terminées
-- Suppression des tâches
-- Sauvegarde des tâches avec `SharedPreferences`
+- Suppression des tâches avec confirmation
+- Gestion de l'état global avec `Provider`
+- Sauvegarde des tâches localement avec `SharedPreferences`
 - Interface utilisateur réactive avec le style Cupertino
+- Filtrage des tâches par état (toutes, complètes, incomplètes)
 
 ## Installation
 
