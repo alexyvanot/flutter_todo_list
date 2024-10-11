@@ -59,13 +59,14 @@ Pour utiliser l'application Flutter Todo List :
    Entrez le titre de la tâche dans le champ de texte et appuyez sur le bouton **Ajouter**. La tâche sera ajoutée à la liste.
 
 2. **Cocher et décocher une tâche :**  
-   Appuyez sur le titre d'une tâche pour la marquer comme terminée. Cela barrera le texte de la tâche. Appuyez à nouveau sur le titre pour la décocher.
+   Appuyez sur l'interrupteur à côté de chaque tâche pour la marquer comme terminée. Cela barrera le texte de la tâche. Appuyez à nouveau sur l'interrupteur pour la décocher.
 
 3. **Supprimer une tâche :**  
-   Appuyez longuement sur le titre d'une tâche pour la supprimer de la liste.
+   Glissez la tâche de droite à gauche. Une boîte de dialogue de confirmation apparaîtra pour vérifier si vous souhaitez bien supprimer la tâche. Appuyez sur **Supprimer** pour confirmer.
 
 La sauvegarde des tâches est automatique. Les modifications sont enregistrées et persistées dans l'application, ce qui signifie que vos tâches resteront disponibles même après la fermeture de l'application.
 
 ## License
 
 Ce projet est sous licence MIT. Consultez le fichier [LICENSE](LICENSE) pour plus de détails.
+
