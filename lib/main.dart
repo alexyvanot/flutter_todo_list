@@ -69,9 +69,9 @@ class TodoListScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildFilterButton(context, 'all', 'Tous'),
-                    _buildFilterButton(context, 'completed', 'Complètes'),
-                    _buildFilterButton(context, 'incomplete', 'Incomplètes'),
+                    _buildFilterButton(context, TodoStatus.all, 'Tous'),
+                    _buildFilterButton(context, TodoStatus.completed, 'Complètes'),
+                    _buildFilterButton(context, TodoStatus.incomplete, 'Incomplètes'),
                   ],
                 ),
               ),
@@ -142,7 +142,7 @@ class TodoListScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFilterButton(BuildContext context, String filterValue, String label) {
+  Widget _buildFilterButton(BuildContext context, TodoStatus filterValue, String label) {
     final todoProvider = Provider.of<TodoProvider>(context);
     final isSelected = todoProvider.filter == filterValue;
 
@@ -200,23 +200,25 @@ class TodoListScreen extends StatelessWidget {
   }
 }
 
+enum TodoStatus { all, completed, incomplete }
+
 class TodoProvider extends ChangeNotifier {
   final List<TodoItem> _todos = [];
-  String _filter = 'all';
+  TodoStatus _filter = TodoStatus.all;
   final TextEditingController _controller = TextEditingController();
 
   TextEditingController get controller => _controller;
 
   List<TodoItem> get filteredTodos {
-    if (_filter == 'completed') {
+    if (_filter == TodoStatus.completed) {
       return _todos.where((todo) => todo.isDone).toList();
-    } else if (_filter == 'incomplete') {
+    } else if (_filter == TodoStatus.incomplete) {
       return _todos.where((todo) => !todo.isDone).toList();
     }
     return _todos;
   }
 
-  String get filter => _filter;
+  TodoStatus get filter => _filter;
 
   TodoProvider() {
     _loadTodos();
@@ -243,7 +245,7 @@ class TodoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setFilter(String filter) {
+  void setFilter(TodoStatus filter) {
     _filter = filter;
     notifyListeners();
   }
